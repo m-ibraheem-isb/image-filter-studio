@@ -5,9 +5,18 @@ Pixel::Pixel() : R(0), G(0), B(0) {}
 Pixel::Pixel(int r, int g, int b) : R(r), G(g), B(b) {}
 
 // Getters:
-int Pixel::getR() const {}
-int Pixel::getG() const {}
-int Pixel::getB() const {}
+int Pixel::getR() const
+{
+  return R;
+}
+int Pixel::getG() const
+{
+  return G;
+}
+int Pixel::getB() const
+{
+  return B;
+}
 
 // Setters:
 void Pixel::setR(int r)
@@ -37,24 +46,24 @@ int Pixel::clamp(int val)
 // Ascii Return:
 char Pixel::AsciReturn(char c) const
 {
-  int brightness = (R + G + B) / 3;
+  int Ascii = (R + G + B) / 3;
   c = ' ';
 
-  if (brightness >= 0 && brightness <= 27)
+  if (Ascii >= 0 && Ascii <= 27)
     c = ' ';
-  else if (brightness <= 55)
+  else if (Ascii <= 55)
     c = '.';
-  else if (brightness <= 83)
+  else if (Ascii <= 83)
     c = ':';
-  else if (brightness <= 111)
+  else if (Ascii <= 111)
     c = '-';
-  else if (brightness <= 139)
+  else if (Ascii <= 139)
     c = '=';
-  else if (brightness <= 167)
+  else if (Ascii <= 167)
     c = '+';
-  else if (brightness <= 195)
+  else if (Ascii <= 195)
     c = '*';
-  else if (brightness <= 223)
+  else if (Ascii <= 223)
     c = '#';
   else
     c = '@';
