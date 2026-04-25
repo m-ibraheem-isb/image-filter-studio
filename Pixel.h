@@ -5,9 +5,9 @@ using namespace std;
 class Pixel
 {
 private:
-  int r;
-  int g;
-  int b;
+  int R;
+  int G;
+  int B;
 
 public:
   Pixel();
@@ -21,7 +21,9 @@ public:
   void setG(int g);
   void setB(int b);
 
+  char AsciReturn(char c) const;
+
   static int clamp(int val);
-  Pixel operator+(const Pixel &p);
+  Pixel operator+(const Pixel &p) const;
   friend ostream &operator<<(ostream &os, const Pixel &p);
 };
