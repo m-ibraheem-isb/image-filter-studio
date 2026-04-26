@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Pixel.h"
+#include "Image.h"
 using namespace std;
 
 // #define STB_IMAGE_IMPLEMENTATION
@@ -60,8 +61,68 @@ int main()
 
   // stbi_image_free(data);
   // return 0;
-  Pixel c2(201, 202, 203);
-  Pixel c1(101,102,103);
-  Pixel c3 = c1 + c2;
-  cout << c3;
+
+  // Pixel c2(201, 202, 203);
+  // Pixel c1(101,102,103);
+  // Pixel c3 = c1 + c2;
+  // cout << c3;
+
+  // // Create image 5x5
+  // Image img2(5, 5);
+
+  // // Set pixel (0,0) to red
+  // img2.at(0, 0).setR(255);
+  // img2.at(0, 0).setG(0);
+  // img2.at(0, 0).setB(0);
+
+  // // Get pixel back
+  // int r = img2.at(0, 0).getR();
+  // int g = img2.at(0, 0).getG();
+  // int b = img2.at(0, 0).getB();
+
+  // // Print values
+  // cout << r << " " << g << " " << b << endl;
+
+  // Image c1(7, 4);
+  // cout << c1.getHeight();
+  // cout << c1.getWidth();
+
+  // Image image(20, 10);
+  // for (int i = 0; i < image.getHeight();i++)
+  // {
+  //   for (int j = 0; j < image.getWidth();j++)
+  //   {
+  //     image.at(i, j).setR(255);
+  //     image.at(i, j).setG(255);
+  //     image.at(i, j).setB(255);
+  //   }
+  // }
+
+  // image.displayASCII();
+
+  // Image c1(5, 5);
+  // c1.at(0, 0).setR(255);
+  // c1.at(0, 0).setG(0);
+  // c1.at(0, 0).setB(0);
+
+  // Image c2 = c1;
+  // // c2.at(0, 0).setR(0);
+  // // c2.at(0, 0).setG(255);
+  // // c2.at(0, 0).setB(255);
+
+  // cout << c2.at(0, 0).getR() << endl;
+  // cout << c2.at(0, 0).getG() << endl;
+  // cout << c2.at(0, 0).getB();
+
+  Image img(100, 100);
+  for (int i = 0; i < 100; i++)
+  {
+    for (int j = 0; j < 100; j++)
+    {
+      img.at(i, j).setR(255);
+      img.at(i, j).setG(0);
+      img.at(i, j).setB(0);
+    }
+  }
+  img.save("testoutput.jpg");
 }

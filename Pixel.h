@@ -21,7 +21,7 @@ public:
   void setG(int g);
   void setB(int b);
 
-  char AsciReturn(char c) const;
+  char AsciReturn() const;
 
   static int clamp(int val);
   Pixel operator+(const Pixel &p) const;

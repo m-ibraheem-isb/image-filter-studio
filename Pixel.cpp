@@ -44,31 +44,28 @@ int Pixel::clamp(int val)
 }
 
 // Ascii Return:
-char Pixel::AsciReturn(char c) const
+char Pixel::AsciReturn() const
 {
   int Ascii = (R + G + B) / 3;
-  c = ' ';
 
-  if (Ascii >= 0 && Ascii <= 27)
-    c = ' ';
+  if (Ascii <= 27)
+    return ' ';
   else if (Ascii <= 55)
-    c = '.';
+    return '.';
   else if (Ascii <= 83)
-    c = ':';
+    return ':';
   else if (Ascii <= 111)
-    c = '-';
+    return '-';
   else if (Ascii <= 139)
-    c = '=';
+    return '=';
   else if (Ascii <= 167)
-    c = '+';
+    return '+';
   else if (Ascii <= 195)
-    c = '*';
+    return '*';
   else if (Ascii <= 223)
-    c = '#';
+    return '#';
   else
-    c = '@';
-
-  return c;
+    return '@';
 }
 
 // ====== Operator Overloading ======
@@ -86,8 +83,7 @@ Pixel Pixel::operator+(const Pixel &P) const
 // Operator : "<<"
 std::ostream &operator<<(ostream &out, const Pixel &P)
 {
-  char c = P.AsciReturn(c);
-  out << c << endl;
+  out << P.AsciReturn();
   return out;
 }
 
