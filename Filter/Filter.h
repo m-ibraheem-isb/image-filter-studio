@@ -8,10 +8,11 @@ class Filter
 private:
   int filterID;
   string filterName;
-  string category;
+  string Category;
   bool isEnabled;
 
 public:
+  Filter();
   Filter(int id, string name, string category, bool enabled = true);
   virtual ~Filter();
 

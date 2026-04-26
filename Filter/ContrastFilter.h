@@ -1,13 +1,14 @@
 #pragma once
 #include "Filter.h"
 
-class Contrast : public Filter
+class ContrastFilter : public Filter
 {
 private:
   int minValue;
   int maxValue;
 
 public:
-  Contrast();
+  ContrastFilter();
+  ContrastFilter(int Min, int Max);
   Image apply(Image img) override;
 };

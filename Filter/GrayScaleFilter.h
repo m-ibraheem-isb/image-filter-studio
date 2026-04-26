@@ -1,9 +1,9 @@
 #pragma once
 #include "Filter.h"
 
-class GrayscaleFilter : public Filter
+class GrayScaleFilter : public Filter
 {
 public:
-  GrayscaleFilter();
+  GrayScaleFilter();
   Image apply(Image img) override;
 };
