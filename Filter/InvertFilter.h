@@ -5,5 +5,5 @@ class InvertFilter : public Filter
 {
 public:
   InvertFilter();
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };

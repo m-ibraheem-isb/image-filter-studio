@@ -16,7 +16,7 @@ public:
   Filter(int id, string name, string category, bool enabled = true);
   virtual ~Filter();
 
-  virtual Image apply(Image img) = 0;
+  virtual Image apply(const Image &img) = 0;
 
   int getFilterID() const;
   string getFilterName() const;

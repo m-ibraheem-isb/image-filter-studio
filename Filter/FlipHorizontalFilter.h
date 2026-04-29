@@ -5,5 +5,5 @@ class FlipHorizontalFilter : public Filter
 {
 public:
   FlipHorizontalFilter();
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };

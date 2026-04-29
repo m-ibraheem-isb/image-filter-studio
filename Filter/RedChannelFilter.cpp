@@ -4,7 +4,7 @@
 RedChannelFilter::RedChannelFilter() : Filter(5, "Red Channel Only", "Pixel Transform", true) {}
 
 // Overloaded apply() Function:
-Image RedChannelFilter::apply(Image img)
+Image RedChannelFilter::apply(const Image &img)
 {
   Image temp = img;
   for (int i = 0; i < img.getHeight(); i++)

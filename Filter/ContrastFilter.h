@@ -10,5 +10,5 @@ private:
 public:
   ContrastFilter();
   ContrastFilter(int Min, int Max);
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };

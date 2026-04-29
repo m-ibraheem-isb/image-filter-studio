@@ -7,7 +7,7 @@ BrightnessFilter::BrightnessFilter(int value) : Filter(3, "Brightness Adjust", "
 }
 
 // Overloaded apply() Function:
-Image BrightnessFilter::apply(Image img)
+Image BrightnessFilter::apply(const Image &img)
 {
   Image temp = img;
   for (int i = 0; i < img.getHeight(); i++)
@@ -20,15 +20,10 @@ Image BrightnessFilter::apply(Image img)
       int g = (temp.at(i, j).getG()) + adjustmentValue;
       int b = (temp.at(i, j).getB()) + adjustmentValue;
 
-      // Clamp Checking:
-      int NewR = temp.at(i, j).clamp(r);
-      int NewG = temp.at(i, j).clamp(g);
-      int NewB = temp.at(i, j).clamp(b);
-
       // Setting New Values:
-      temp.at(i, j).setR(NewR);
-      temp.at(i, j).setG(NewR);
-      temp.at(i, j).setB(NewR);
+      temp.at(i, j).setR(r);
+      temp.at(i, j).setG(g);
+      temp.at(i, j).setB(b);
     }
   }
   return temp;

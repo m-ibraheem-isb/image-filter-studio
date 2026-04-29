@@ -7,5 +7,5 @@ public:
   BoxBlurFilter();
 
   bool CheckBoundary(int row,int coloumn,int height, int width);
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };

@@ -4,7 +4,7 @@
 GreenChannelFilter::GreenChannelFilter() : Filter(6, "Green Channel Only", "Pixel Transform", true) {}
 
 // Overloaded apply() Function:
-Image GreenChannelFilter::apply(Image img)
+Image GreenChannelFilter::apply(const Image &img)
 {
   Image temp = img;
   for (int i = 0; i < img.getHeight(); i++)

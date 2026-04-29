@@ -18,7 +18,7 @@ public:
   Image(const Image &other);
   ~Image();
 
-  Pixel &at(int height, int width);
+  Pixel &at(int row, int col);
   int getWidth() const;
   int getHeight() const;
 

@@ -5,5 +5,5 @@ class GrayScaleFilter : public Filter
 {
 public:
   GrayScaleFilter();
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };

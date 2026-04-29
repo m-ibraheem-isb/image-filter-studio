@@ -8,7 +8,7 @@ ContrastFilter::ContrastFilter(int Min, int Max) : Filter(4, "Contrast Stretch",
 }
 
 // Overloaded apply() Function:
-Image ContrastFilter::apply(Image img)
+Image ContrastFilter::apply(const Image &img)
 {
   Image temp = img;
   for (int i = 0; i < img.getHeight(); i++)

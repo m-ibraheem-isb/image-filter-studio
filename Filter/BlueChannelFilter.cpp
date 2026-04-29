@@ -4,7 +4,7 @@
 BlueChannelFilter::BlueChannelFilter() : Filter(7, "Blue Channel Only", "Pixel Transform", true) {}
 
 // Overloaded apply() Function:
-Image BlueChannelFilter::apply(Image img)
+Image BlueChannelFilter::apply(const Image &img)
 {
   Image temp = img;
   for (int i = 0; i < img.getHeight(); i++)

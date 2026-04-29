@@ -4,17 +4,19 @@
 FlipHorizontalFilter::FlipHorizontalFilter() : Filter(8, "Flip Horizontal", "Geometric", true) {}
 
 // Overloaded apply() Function:
-Image FlipHorizontalFilter::apply(Image img)
+Image FlipHorizontalFilter::apply(const Image &img)
 {
   Pixel temp;
   Image copy = img;
-  for (int i = 0; i < img.getHeight() ; i++)
+  int height = img.getHeight();
+  int width = img.getWidth();
+  for (int i = 0; i < height; i++)
   {
-    for (int j = 0; j < img.getWidth() / 2; j++)
+    for (int j = 0; j < width / 2; j++)
     {
       temp = copy.at(i, j);
-      copy.at(i, j) = copy.at(i, img.getWidth() - 1 - j);
-      copy.at(i, img.getWidth() - 1 - j) = temp;
+      copy.at(i, j) = copy.at(i, width - 1 - j);
+      copy.at(i, width - 1 - j) = temp;
     }
   }
   return copy;

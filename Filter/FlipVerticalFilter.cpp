@@ -4,17 +4,19 @@
 FlipVerticalFilter::FlipVerticalFilter() : Filter(9, "Flip Vertical", "Geometric", true) {}
 
 // Overloaded apply() Function:
-Image FlipVerticalFilter::apply(Image img)
+Image FlipVerticalFilter::apply(const Image &img)
 {
   Pixel temp;
   Image copy = img;
-  for (int i = 0; i < img.getHeight(); i++)
+  int height = img.getHeight();
+  int width = img.getWidth();
+  for (int i = 0; i < height / 2; i++)
   {
-    for (int j = 0; j < img.getWidth() / 2; j++)
+    for (int j = 0; j < width ; j++)
     {
       temp = copy.at(i, j);
-      copy.at(i, j) = copy.at(img.getHeight() -1- i, j);
-      copy.at(img.getHeight() - 1 - i, img.getWidth() - 1 - j) = temp;
+      copy.at(i, j) = copy.at(height - 1 - i, j);
+      copy.at(height - 1 - i, j) = temp;
     }
   }
   return copy;

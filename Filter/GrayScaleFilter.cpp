@@ -2,15 +2,16 @@
 
 // Default Constructor:
 GrayScaleFilter::GrayScaleFilter() : Filter(1, "Grayscale", "Pixel Transform", true)
-{}
+{
+}
 
 // Overloaded apply() Function:
-Image GrayScaleFilter::apply(Image img)
+Image GrayScaleFilter::apply(const Image &img)
 {
   Image temp = img;
   for (int i = 0; i < img.getHeight(); i++)
   {
-    for (int j = 0; j < img.getWidth();j++)
+    for (int j = 0; j < img.getWidth(); j++)
     {
       int r = temp.at(i, j).getR();
       int g = temp.at(i, j).getG();

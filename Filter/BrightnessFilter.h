@@ -8,6 +8,6 @@ private:
 
 public:
   BrightnessFilter(int value);
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
   int getAdjustmentValue() const;
 };

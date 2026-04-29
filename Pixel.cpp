@@ -21,15 +21,15 @@ int Pixel::getB() const
 // Setters:
 void Pixel::setR(int r)
 {
-  R = r;
+  R = clamp(r);
 }
 void Pixel::setG(int g)
 {
-  G = g;
+  G = clamp(g);
 }
 void Pixel::setB(int b)
 {
-  B = b;
+  B = clamp(b);
 }
 
 // Clamp Function:
@@ -76,7 +76,7 @@ Pixel Pixel::operator+(const Pixel &P) const
   Pixel temp;
   temp.R = R + P.R;
   temp.G = G + P.G;
-  temp.B = R + P.B;
+  temp.B = B + P.B;
   return temp;
 }
 

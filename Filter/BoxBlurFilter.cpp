@@ -12,7 +12,7 @@ bool BoxBlurFilter::CheckBoundary(int row, int coloumn, int height, int width)
 }
 
 // Overloaded apply() Function:
-Image BoxBlurFilter::apply(Image img)
+Image BoxBlurFilter::apply(const Image &img)
 {
   Image temp = img;
   int height = img.getHeight();
@@ -34,9 +34,9 @@ Image BoxBlurFilter::apply(Image img)
           int NeighbourColoumn = dr + j;
           if (CheckBoundary(NeighbourRow, NeighbourColoumn, height, width))
           {
-            sumR += img.at(NeighbourRow, NeighbourColoumn).getR();
-            sumG += img.at(NeighbourRow, NeighbourColoumn).getG();
-            sumB += img.at(NeighbourRow, NeighbourColoumn).getB();
+            sumR += temp.at(NeighbourRow, NeighbourColoumn).getR();
+            sumG += temp.at(NeighbourRow, NeighbourColoumn).getG();
+            sumB += temp.at(NeighbourRow, NeighbourColoumn).getB();
             count++;
           }
         }

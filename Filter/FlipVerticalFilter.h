@@ -5,5 +5,5 @@ class FlipVerticalFilter : public Filter
 {
 public:
   FlipVerticalFilter();
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };

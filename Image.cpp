@@ -1,5 +1,5 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image/stb_image.h"
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "stb_image/stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image/stb_image_write.h"
@@ -48,9 +48,9 @@ Image::~Image()
 }
 
 // Object Return:
-Pixel &Image::at(int height, int width)
+Pixel &Image::at(int row, int col)
 {
-  return pixels[height][width];
+  return pixels[row][col];
 }
 
 // Getters:
@@ -79,7 +79,6 @@ void Image::displayASCII()
 // ====== Saving Data ======:
 void Image::save(const string &path)
 {
-  // Converting from Grid or 2D to simple 1D:
   unsigned char *data = new unsigned char[height * width * 3];
   for (int row = 0; row < height; row++)
   {
@@ -92,16 +91,14 @@ void Image::save(const string &path)
     }
   }
 
-  // Writing Image;
+  cout << "Inside save, path = " << path << endl;              // ADD THIS
+  cout << "Width: " << width << " Height: " << height << endl; // ADD THIS
+
   int n = path.length();
   if (path[n - 4] == '.' && path[n - 3] == 'p' && path[n - 2] == 'n' && path[n - 1] == 'g')
   {
-    stbi_write_png("skynew1.png", width, height, 3, data, width * 3);
-  }
-
-  if (path[n - 4] == '.' && path[n - 3] == 'j' && path[n - 2] == 'p' && path[n - 1] == 'g')
-  {
-    stbi_write_jpg("skynew2.jpg", width, height, 3, data, 100);
+    int res = stbi_write_png(path.c_str(), width, height, 3, data, width * 3);
+    cout << "PNG write result: " << res << endl; // ADD THIS
   }
 
   delete[] data;

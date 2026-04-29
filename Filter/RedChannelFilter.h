@@ -5,5 +5,5 @@ class RedChannelFilter : public Filter
 {
 public:
   RedChannelFilter();
-  Image apply(Image img) override;
+  Image apply(const Image &img) override;
 };
