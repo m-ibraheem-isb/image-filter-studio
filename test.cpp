@@ -177,17 +177,17 @@ int main()
   // Image r3 = f3.apply(obj1);
   // r3.save("fliph_output.png");
 
-  FlipVerticalFilter f4;
-  Image r4 = f4.apply(obj1);
-  r4.save("flipv_output.png");
+  // FlipVerticalFilter f4;
+  // Image r4 = f4.apply(obj1);
+  // r4.save("flipv_output.png");
 
   // BoxBlurFilter f5;
   // Image r5 = f5.apply(obj1);
   // r5.save("blur_output.png");
 
-  // ContrastFilter f6;
-  // Image r6 = f6.apply(obj1);
-  // r6.save("contrast_output.png");
+  ContrastFilter f6;
+  Image r6 = f6.apply(obj1);
+  r6.save("contrast_output.png");
 
   // RedChannelFilter f7;
   // Image r7 = f7.apply(obj1);
