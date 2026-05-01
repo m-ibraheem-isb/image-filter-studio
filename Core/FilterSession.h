@@ -17,7 +17,7 @@ private:
   string generateTimestamp();
 
 public:
-  FilterSession(string cnic, Image *img);
+  FilterSession(string Cnic, Image *Img);
   ~FilterSession();
 
   FilterSession &addFilter(Filter *f);
