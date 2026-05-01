@@ -1,7 +1,8 @@
 #include "FilterSession.h"
+#include <ctime>
 
 // Constructor:
-FilterSession::FilterSession(string Cnic, Image *Img) : cnic(Cnic), image(Img) {}
+FilterSession::FilterSession(string Cnic, Image *Img) : cnic(Cnic), image(Img), timestamp(generateTimestamp()) {}
 
 // Destructor:
 FilterSession::~FilterSession()
