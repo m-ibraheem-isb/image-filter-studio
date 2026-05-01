@@ -2,7 +2,7 @@
 // #include "stb_image/stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image/stb_image_write.h"
+#include "../stb_image/stb_image_write.h"
 
 #include "Image.h"
 
@@ -47,8 +47,14 @@ Image::~Image()
   delete[] pixels;
 }
 
-// Object Return:
+// Object Return / For write:
 Pixel &Image::at(int row, int col)
+{
+  return pixels[row][col];
+}
+
+// Object Return / For read:
+const Pixel &Image::at(int row, int col) const
 {
   return pixels[row][col];
 }
@@ -95,11 +101,26 @@ void Image::save(const string &path)
   cout << "Width: " << width << " Height: " << height << endl; // ADD THIS
 
   int n = path.length();
-  if (path[n - 4] == '.' && path[n - 3] == 'p' && path[n - 2] == 'n' && path[n - 1] == 'g')
+  bool saved = false;
+  if (n >= 4 && path.substr(n - 4) == ".png")
   {
     int res = stbi_write_png(path.c_str(), width, height, 3, data, width * 3);
-    cout << "PNG write result: " << res << endl; // ADD THIS
+    cout << "PNG write result: " << res << endl;
+    saved = (res != 0);
   }
-
+  else if (n >= 4 && path.substr(n - 4) == ".jpg")
+  {
+    int res = stbi_write_jpg(path.c_str(), width, height, 3, data, 100);
+    cout << "JPG write result: " << res << endl;
+    saved = (res != 0);
+  }
+  else
+  {
+    cout << "Error: Unsupported file extension. Use .png or .jpg" << endl;
+  }
   delete[] data;
+  if (!saved)
+  {
+    cout << "Error: Image was not saved successfully." << endl;
+  }
 }

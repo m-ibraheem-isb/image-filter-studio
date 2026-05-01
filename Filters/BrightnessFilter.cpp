@@ -16,9 +16,9 @@ Image BrightnessFilter::apply(const Image &img)
     {
 
       // Getting Values:
-      int r = (temp.at(i, j).getR()) + adjustmentValue;
-      int g = (temp.at(i, j).getG()) + adjustmentValue;
-      int b = (temp.at(i, j).getB()) + adjustmentValue;
+      int r = (img.at(i, j).getR()) + adjustmentValue;
+      int g = (img.at(i, j).getG()) + adjustmentValue;
+      int b = (img.at(i, j).getB()) + adjustmentValue;
 
       // Setting New Values:
       temp.at(i, j).setR(r);

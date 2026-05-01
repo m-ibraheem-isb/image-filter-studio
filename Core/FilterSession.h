@@ -1,6 +1,6 @@
 #pragma once
 #include "Image.h"
-#include "Filter/Filter.h"
+#include "../Filters/Filter.h"
 #include <vector>
 #include <string>
 using namespace std;

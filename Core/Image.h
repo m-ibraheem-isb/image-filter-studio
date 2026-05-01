@@ -18,7 +18,8 @@ public:
   Image(const Image &other);
   ~Image();
 
-  Pixel &at(int row, int col);
+  Pixel &at(int row, int col);             // for temp (write)
+  const Pixel &at(int row, int col) const; // for img (read)
   int getWidth() const;
   int getHeight() const;
 

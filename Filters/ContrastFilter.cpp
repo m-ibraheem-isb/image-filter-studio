@@ -22,9 +22,9 @@ Image ContrastFilter::apply(const Image &img)
   {
     for (int j = 0; j < img.getWidth(); j++)
     {
-      int r = temp.at(i, j).getR();
-      int g = temp.at(i, j).getG();
-      int b = temp.at(i, j).getB();
+      int r = img.at(i, j).getR();
+      int g = img.at(i, j).getG();
+      int b = img.at(i, j).getB();
 
       if (r < minR)
         minR = r;
@@ -55,9 +55,9 @@ Image ContrastFilter::apply(const Image &img)
   {
     for (int j = 0; j < img.getWidth(); j++)
     {
-      int r = temp.at(i, j).getR();
-      int g = temp.at(i, j).getG();
-      int b = temp.at(i, j).getB();
+      int r = img.at(i, j).getR();
+      int g = img.at(i, j).getG();
+      int b = img.at(i, j).getB();
 
       int newR = (r - minR) * 255 / (maxR - minR);
       int newG = (g - minG) * 255 / (maxG - minG);

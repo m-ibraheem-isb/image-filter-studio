@@ -1,5 +1,5 @@
 #pragma once
-#include "../Image.h"
+#include "../Core/Image.h"
 #include <string>
 using namespace std;
 

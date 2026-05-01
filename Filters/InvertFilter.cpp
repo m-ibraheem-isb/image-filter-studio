@@ -11,9 +11,9 @@ Image InvertFilter::apply(const Image &img)
   {
     for (int j = 0; j < img.getWidth(); j++)
     {
-      int r = 255 - (temp.at(i, j).getR());
-      int g = 255 - (temp.at(i, j).getG());
-      int b = 255 - (temp.at(i, j).getB());
+      int r = 255 - (img.at(i, j).getR());
+      int g = 255 - (img.at(i, j).getG());
+      int b = 255 - (img.at(i, j).getB());
 
       temp.at(i, j).setR(r);
       temp.at(i, j).setG(g);

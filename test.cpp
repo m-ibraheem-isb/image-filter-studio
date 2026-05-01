@@ -1,18 +1,18 @@
 #include <iostream>
-#include "Pixel.h"
-#include "Image.h"
-#include "Pixel.h"
-#include "Image.h"
-#include "Filter/GrayscaleFilter.h"
-#include "Filter/InvertFilter.h"
-#include "Filter/BrightnessFilter.h"
-#include "Filter/ContrastFilter.h"
-#include "Filter/RedChannelFilter.h"
-#include "Filter/GreenChannelFilter.h"
-#include "Filter/BlueChannelFilter.h"
-#include "Filter/FlipHorizontalFilter.h"
-#include "Filter/FlipVerticalFilter.h"
-#include "Filter/BoxBlurFilter.h"
+#include "Core/Pixel.h"
+#include "Core/Image.h"
+#include "Core/Pixel.h"
+#include "Core/Image.h"
+#include "Filters/GrayscaleFilter.h"
+#include "Filters/InvertFilter.h"
+#include "Filters/BrightnessFilter.h"
+#include "Filters/ContrastFilter.h"
+#include "Filters/RedChannelFilter.h"
+#include "Filters/GreenChannelFilter.h"
+#include "Filters/BlueChannelFilter.h"
+#include "Filters/FlipHorizontalFilter.h"
+#include "Filters/FlipVerticalFilter.h"
+#include "Filters/BoxBlurFilter.h"
 using namespace std;
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -181,13 +181,58 @@ int main()
   // Image r4 = f4.apply(obj1);
   // r4.save("flipv_output.png");
 
-  // BoxBlurFilter f5;
-  // Image r5 = f5.apply(obj1);
-  // r5.save("blur_output.png");
+  // Print a few pixel values before applying the filter
+  // cout << "Before blur (first 3 pixels):\n";
+  // for (int i = 0; i < 3 && i < obj1.getHeight(); ++i)
+  // {
+  //   for (int j = 0; j < 3 && j < obj1.getWidth(); ++j)
+  //   {
+  //     cout << "(" << obj1.at(i, j).getR() << "," << obj1.at(i, j).getG() << "," << obj1.at(i, j).getB() << ") ";
+  //   }
+  //   cout << endl;
+  // }
 
-  ContrastFilter f6;
-  Image r6 = f6.apply(obj1);
-  r6.save("contrast_output.png");
+  BoxBlurFilter f5;
+  Image r5 = f5.apply(obj1);
+
+  // Print a few pixel values after applying the filter
+  cout << "After blur (first 3 pixels):\n";
+  for (int i = 0; i < 3 && i < r5.getHeight(); ++i)
+  {
+    for (int j = 0; j < 3 && j < r5.getWidth(); ++j)
+    {
+      cout << "(" << r5.at(i, j).getR() << "," << r5.at(i, j).getG() << "," << r5.at(i, j).getB() << ") ";
+    }
+    cout << endl;
+  }
+
+  r5.save("Output Images/blur_output.png");
+
+  // Print a few pixel values before applying the contrast filter
+  cout << "Before contrast (first 3 pixels):\n";
+  for (int i = 0; i < 3 && i < obj1.getHeight(); ++i)
+  {
+    for (int j = 0; j < 3 && j < obj1.getWidth(); ++j)
+    {
+      cout << "(" << obj1.at(i, j).getR() << "," << obj1.at(i, j).getG() << "," << obj1.at(i, j).getB() << ") ";
+    }
+    cout << endl;
+  }
+
+  // ContrastFilter f6;
+  // Image r6 = f6.apply(obj1);
+
+  // // Print a few pixel values after applying the contrast filter
+  // cout << "After contrast (first 3 pixels):\n";
+  // for (int i = 0; i < 3 && i < r6.getHeight(); ++i)
+  // {
+  //   for (int j = 0; j < 3 && j < r6.getWidth(); ++j)
+  //   {
+  //     cout << "(" << r6.at(i, j).getR() << "," << r6.at(i, j).getG() << "," << r6.at(i, j).getB() << ") ";
+  //   }
+  //   cout << endl;
+  // }
+  // r6.save("contrast_output.png");
 
   // RedChannelFilter f7;
   // Image r7 = f7.apply(obj1);

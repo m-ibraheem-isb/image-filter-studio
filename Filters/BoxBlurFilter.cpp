@@ -1,7 +1,7 @@
 #include "BoxBlurFilter.h"
 
 // Default Constructor:
-BoxBlurFilter::BoxBlurFilter() : Filter(10, "Flip Vertical", "Spatial Filter", true) {}
+BoxBlurFilter::BoxBlurFilter() : Filter(10, "Box Blur", "Spatial Filter", true) {}
 
 // Check Boundary:
 bool BoxBlurFilter::CheckBoundary(int row, int coloumn, int height, int width)
@@ -30,13 +30,13 @@ Image BoxBlurFilter::apply(const Image &img)
       {
         for (int dc = -1; dc <= 1; dc++)
         {
-          int NeighbourRow = dc + i;
-          int NeighbourColoumn = dr + j;
+          int NeighbourRow = i + dr;
+          int NeighbourColoumn = j + dc;
           if (CheckBoundary(NeighbourRow, NeighbourColoumn, height, width))
           {
-            sumR += temp.at(NeighbourRow, NeighbourColoumn).getR();
-            sumG += temp.at(NeighbourRow, NeighbourColoumn).getG();
-            sumB += temp.at(NeighbourRow, NeighbourColoumn).getB();
+            sumR += img.at(NeighbourRow, NeighbourColoumn).getR();
+            sumG += img.at(NeighbourRow, NeighbourColoumn).getG();
+            sumB += img.at(NeighbourRow, NeighbourColoumn).getB();
             count++;
           }
         }
