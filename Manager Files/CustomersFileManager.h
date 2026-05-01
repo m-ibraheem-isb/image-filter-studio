@@ -3,15 +3,15 @@
 #include <string>
 using namespace std;
 
-class CustomerFileManager
+class CustomersFileManager
 {
 private:
   string customersFilePath;
   string blockedCnicsFilePath;
 
 public:
-  CustomerFileManager();
-  CustomerFileManager(string path);
+  CustomersFileManager();
+  CustomersFileManager(string path);
 
   void registerCustomer(string cnic, string password,
                         string name, string gender,

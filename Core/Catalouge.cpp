@@ -94,10 +94,11 @@ void Catalogue::loadFilters()
   file.close();
 }
 
+
 void Catalogue::saveFilters()
 {
-  CatalogueFileManager cfm(filePath);
-  cfm.saveCatalogue(filters);
+  CatalogueFileManager Save(filePath);
+  Save.saveCatalogue(filters);
 }
 
 vector<Filter *> Catalogue::getAllFilters()
