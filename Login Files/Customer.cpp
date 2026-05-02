@@ -8,6 +8,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include <conio.h>
 using namespace std;
 
 Customer::Customer(string cnic, string password, string fullName,
@@ -30,8 +31,24 @@ bool Customer::login()
   {
     cout << "Enter CNIC: ";
     cin >> inputCnic;
+
     cout << "Enter Password: ";
-    cin >> inputPass;
+    char ch;
+    inputPass = "";
+    while ((ch = _getch()) != '\r')
+    {
+      if (ch == '\b' && !inputPass.empty())
+      {
+        inputPass.pop_back();
+        cout << "\b \b";
+      }
+      else if (ch != '\b')
+      {
+        inputPass += ch;
+        cout << '*';
+      }
+    }
+    cout << endl;
 
     if (cfm.isCnicBlocked(inputCnic))
     {
@@ -112,7 +129,22 @@ void Customer::registerAccount()
   }
 
   cout << "Enter Password (exactly 9 chars, 1 uppercase, 1 digit): ";
-  cin >> password;
+  char ch;
+  password = "";
+  while ((ch = _getch()) != '\r')
+  {
+    if (ch == '\b' && !password.empty())
+    {
+      password.pop_back();
+      cout << "\b \b";
+    }
+    else if (ch != '\b')
+    {
+      password += ch;
+      cout << '*';
+    }
+  }
+  cout << endl;
 
   if (password.length() != 9)
   {
@@ -134,7 +166,23 @@ void Customer::registerAccount()
   }
 
   cout << "Confirm Password: ";
-  cin >> confirmPass;
+  char ch2;
+  confirmPass = "";
+  while ((ch2 = _getch()) != '\r')
+  {
+    if (ch2 == '\b' && !confirmPass.empty())
+    {
+      confirmPass.pop_back();
+      cout << "\b \b";
+    }
+    else if (ch2 != '\b')
+    {
+      confirmPass += ch2;
+      cout << '*';
+    }
+  }
+  cout << endl;
+
   if (password != confirmPass)
   {
     cout << "Passwords do not match." << endl;
@@ -427,7 +475,6 @@ void Customer::viewSessionHistory()
     {
       table[i][j] = parts[j];
       int len = table[i][j].length();
-
       if (len > w[j])
       {
         if (j == 2 && len > 35)
@@ -491,18 +538,14 @@ void Customer::viewSessionHistory()
     for (int j = 0; j < 4; j++)
     {
       string cell = table[r][j];
-
       if ((int)cell.length() > w[j])
-      {
         cout << cell.substr(0, w[j]);
-      }
       else
       {
         cout << cell;
         for (int k = 0; k < w[j] - (int)cell.length(); k++)
           cout << " ";
       }
-
       if (j < 3)
         cout << " │ ";
     }

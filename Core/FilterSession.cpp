@@ -6,8 +6,8 @@ using namespace std;
 
 FilterSession::FilterSession(string cnic, Image *img)
 {
-  this->cnic      = cnic;
-  this->image     = img;
+  this->cnic = cnic;
+  this->image = img;
   this->timestamp = generateTimestamp();
   this->outputFileName = "Output Images/" + cnic + "_" + timestamp + ".png";
 }
@@ -22,7 +22,7 @@ string FilterSession::generateTimestamp()
   time_t now = time(0);
   tm *ltm = localtime(&now);
   char buffer[20];
-  strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", ltm);
+  strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H:%M:%S", ltm);
   return string(buffer);
 }
 
@@ -34,7 +34,7 @@ string FilterSession::generateOutputFileName()
 FilterSession &FilterSession::addFilter(Filter *f)
 {
   pipeline.push_back(f);
-  return *this;   // enables method chaining
+  return *this; // enables method chaining
 }
 
 void FilterSession::displayPipeline()
@@ -73,7 +73,7 @@ void FilterSession::applyAll()
     cout << "\nApplying filter " << (i + 1) << "/" << pipeline.size()
          << ": " << pipeline[i]->getFilterName() << " ..." << endl;
 
-    *image = pipeline[i]->apply(*image);   // operator= now deep-copies → no crash
+    *image = pipeline[i]->apply(*image); // operator= now deep-copies → no crash
 
     image->displayASCII();
   }

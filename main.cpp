@@ -2,6 +2,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
+#include <cstdlib>
 #include <string>
 #include "Core/Pixel.h"
 #include "Core/Image.h"
@@ -12,11 +13,10 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image/stb_image_write.h"
 
-using namespace std;
+    using namespace std;
 
 static void printMenuBox(const string &title, const string rows[], int rowCount, int w = 46)
 {
-  // 1. Calculate max width dynamically and handle tabs so borders don't break
   int maxNeededWidth = title.length() + 4;
   for (int i = 0; i < rowCount; i++)
   {
@@ -29,16 +29,11 @@ static void printMenuBox(const string &title, const string rows[], int rowCount,
         currentLen++;
     }
     if (currentLen + 4 > maxNeededWidth)
-    { // +4 for padding
       maxNeededWidth = currentLen + 4;
-    }
   }
-
 
   if (w < maxNeededWidth)
-  {
     w = maxNeededWidth;
-  }
 
   string topBar = "╔";
   string midBar = "╠";
@@ -71,7 +66,6 @@ static void printMenuBox(const string &title, const string rows[], int rowCount,
 
   for (int i = 0; i < rowCount; i++)
   {
-    // Replace tabs with spaces for final display
     string cleanRow = "";
     for (int j = 0; j < rows[i].length(); j++)
     {
@@ -80,7 +74,6 @@ static void printMenuBox(const string &title, const string rows[], int rowCount,
       else
         cleanRow += rows[i][j];
     }
-
     int spaces = w - 2 - (int)cleanRow.length();
     if (spaces < 0)
       spaces = 0;
@@ -97,6 +90,7 @@ void showAdminMenu(Admin &admin)
   int choice;
   do
   {
+    system("cls");
     string rows[] = {
         "1. Manage Filter Catalog",
         "2. Manage Customers",
@@ -108,6 +102,7 @@ void showAdminMenu(Admin &admin)
 
     if (choice == 1)
     {
+      system("cls");
       admin.manageFilterCatalogue();
       cout << "\nPress Enter to return to Admin Panel...";
       cin.ignore();
@@ -115,6 +110,7 @@ void showAdminMenu(Admin &admin)
     }
     else if (choice == 2)
     {
+      system("cls");
       string subRows[] = {
           "1. View All Customers",
           "2. Search Customer",
@@ -128,6 +124,7 @@ void showAdminMenu(Admin &admin)
 
       if (subChoice == 1)
       {
+        system("cls");
         admin.viewAllCustomers();
         cout << "\nPress Enter to return to Admin Panel...";
         cin.ignore();
@@ -135,6 +132,7 @@ void showAdminMenu(Admin &admin)
       }
       else if (subChoice == 2)
       {
+        system("cls");
         string cnic;
         cout << "Enter CNIC to search: ";
         cin >> cnic;
@@ -145,6 +143,7 @@ void showAdminMenu(Admin &admin)
       }
       else if (subChoice == 3)
       {
+        system("cls");
         string cnic;
         cout << "Enter CNIC to block: ";
         cin >> cnic;
@@ -155,6 +154,7 @@ void showAdminMenu(Admin &admin)
       }
       else if (subChoice == 4)
       {
+        system("cls");
         string cnic;
         cout << "Enter CNIC to unblock: ";
         cin >> cnic;
@@ -165,6 +165,7 @@ void showAdminMenu(Admin &admin)
       }
       else if (subChoice == 5)
       {
+        system("cls");
         string cnic;
         cout << "Enter CNIC to delete: ";
         cin >> cnic;
@@ -176,6 +177,7 @@ void showAdminMenu(Admin &admin)
     }
     else if (choice == 3)
     {
+      system("cls");
       admin.viewAllSessions();
       cout << "\nPress Enter to return to Admin Panel...";
       cin.ignore();
@@ -183,6 +185,7 @@ void showAdminMenu(Admin &admin)
     }
     else if (choice == 4)
     {
+      system("cls");
       admin.logout();
     }
   } while (choice != 4);
@@ -193,6 +196,7 @@ void showCustomerMenu(Customer &customer)
   int choice;
   do
   {
+    system("cls");
     string welcomeRow = "Welcome, " + customer.getFullName();
     string rows[] = {
         welcomeRow,
@@ -206,6 +210,7 @@ void showCustomerMenu(Customer &customer)
 
     if (choice == 1)
     {
+      system("cls");
       customer.buildPipeline();
       cout << "\nPress Enter to return to Customer Panel...";
       cin.ignore();
@@ -213,6 +218,7 @@ void showCustomerMenu(Customer &customer)
     }
     else if (choice == 2)
     {
+      system("cls");
       customer.applyFilters();
       cout << "\nPress Enter to return to Customer Panel...";
       cin.ignore();
@@ -220,6 +226,7 @@ void showCustomerMenu(Customer &customer)
     }
     else if (choice == 3)
     {
+      system("cls");
       customer.viewSessionHistory();
       cout << "\nPress Enter to return to Customer Panel...";
       cin.ignore();
@@ -227,6 +234,7 @@ void showCustomerMenu(Customer &customer)
     }
     else if (choice == 4)
     {
+      system("cls");
       customer.logout();
     }
   } while (choice != 4);
@@ -240,6 +248,7 @@ int main()
   int choice;
   do
   {
+    system("cls");
     string rows[] = {
         "1. Admin Login",
         "2. Customer Login",
@@ -251,18 +260,21 @@ int main()
 
     if (choice == 1)
     {
+      system("cls");
       Admin admin("0000000000000", "Admin1234", "Administrator");
       if (admin.login())
         showAdminMenu(admin);
     }
     else if (choice == 2)
     {
+      system("cls");
       Customer customer("", "", "", "", "", "");
       if (customer.login())
         showCustomerMenu(customer);
     }
     else if (choice == 3)
     {
+      system("cls");
       Customer customer("", "", "", "", "", "");
       customer.registerAccount();
       cout << "\nPress Enter to return to main menu...";
@@ -271,6 +283,7 @@ int main()
     }
     else if (choice == 4)
     {
+      system("cls");
       cout << "Goodbye!" << endl;
     }
   } while (choice != 4);

@@ -3,6 +3,7 @@
 #include "../Manager Files/SessionsFileManager.h"
 #include "../Core/Catalouge.h"
 #include <iostream>
+#include <conio.h>
 #include <iomanip>
 using namespace std;
 
@@ -11,7 +12,8 @@ static void tblLine(const int cols[], int n, const string &l, const string &m, c
   cout << l;
   for (int i = 0; i < n; i++)
   {
-    for (int k = 0; k < cols[i]; k++) cout << m;
+    for (int k = 0; k < cols[i]; k++)
+      cout << m;
     cout << (i < n - 1 ? j : r);
   }
   cout << "\n";
@@ -40,8 +42,25 @@ bool Admin::login()
   string inputCnic, inputPass;
   cout << "Enter Admin CNIC: ";
   cin >> inputCnic;
+
   cout << "Enter Admin Password: ";
-  cin >> inputPass;
+  char ch;
+  inputPass = "";
+  while ((ch = _getch()) != '\r')
+  {
+    if (ch == '\b' && !inputPass.empty())
+    {
+      inputPass.pop_back();
+      cout << "\b \b";
+    }
+    else if (ch != '\b')
+    {
+      inputPass += ch;
+      cout << '*';
+    }
+  }
+  cout << endl;
+
   if (inputCnic == ADMIN_CNIC && inputPass == ADMIN_PASS)
   {
     cout << "Admin login successful." << endl;
@@ -63,12 +82,12 @@ void Admin::manageFilterCatalogue()
   int choice;
 
   cout << "\n╔══════════════════════════════════════════════╗\n";
-  cout <<   "║       Manage Filter Catalogue                ║\n";
-  cout <<   "╠══════════════════════════════════════════════╣\n";
-  cout <<   "║  1. View All Filters                         ║\n";
-  cout <<   "║  2. Enable a Filter                          ║\n";
-  cout <<   "║  3. Disable a Filter                         ║\n";
-  cout <<   "╚══════════════════════════════════════════════╝\n";
+  cout << "║       Manage Filter Catalogue                ║\n";
+  cout << "╠══════════════════════════════════════════════╣\n";
+  cout << "║  1. View All Filters                         ║\n";
+  cout << "║  2. Enable a Filter                          ║\n";
+  cout << "║  3. Disable a Filter                         ║\n";
+  cout << "╚══════════════════════════════════════════════╝\n";
   cout << "Enter choice: ";
   cin >> choice;
 
@@ -86,11 +105,10 @@ void Admin::manageFilterCatalogue()
     {
       string status = filters[i]->isFilterEnabled() ? "Enabled" : "Disabled";
       string row[] = {
-        to_string(filters[i]->getFilterID()),
-        filters[i]->getFilterName(),
-        filters[i]->getCategory(),
-        status
-      };
+          to_string(filters[i]->getFilterID()),
+          filters[i]->getFilterName(),
+          filters[i]->getCategory(),
+          status};
       tblRow(row, cols, n);
     }
     tblLine(cols, n, "╚", "═", "╩", "╝");
@@ -133,13 +151,19 @@ void Admin::viewAllSessions()
   for (int i = 0; i < (int)sessions.size(); i++)
   {
     string line = sessions[i];
-    if (!line.empty() && line.back() == '\r') line.pop_back();
+    if (!line.empty() && line.back() == '\r')
+      line.pop_back();
     string parts[4] = {"", "", "", ""};
     int pi = 0;
     for (int j = 0; j < (int)line.length(); j++)
     {
-      if (line[j] == '|') { if (pi < 3) pi++; }
-      else parts[pi] += line[j];
+      if (line[j] == '|')
+      {
+        if (pi < 3)
+          pi++;
+      }
+      else
+        parts[pi] += line[j];
     }
     tblRow(parts, cols, n);
   }
@@ -166,13 +190,19 @@ void Admin::viewAllCustomers()
   for (int i = 0; i < (int)customers.size(); i++)
   {
     string line = customers[i];
-    if (!line.empty() && line.back() == '\r') line.pop_back();
+    if (!line.empty() && line.back() == '\r')
+      line.pop_back();
     string parts[7] = {"", "", "", "", "", "", ""};
     int pi = 0;
     for (int j = 0; j < (int)line.length(); j++)
     {
-      if (line[j] == '|') { if (pi < 6) pi++; }
-      else parts[pi] += line[j];
+      if (line[j] == '|')
+      {
+        if (pi < 6)
+          pi++;
+      }
+      else
+        parts[pi] += line[j];
     }
     string status = (parts[6] == "1") ? "Blocked" : "Active";
     string row[] = {parts[0], parts[2], parts[3], parts[4], parts[5], status};
@@ -190,27 +220,32 @@ string Admin::searchCustomer(string cnic)
     cout << "Customer not found." << endl;
     return record;
   }
-  if (!record.empty() && record.back() == '\r') record.pop_back();
+  if (!record.empty() && record.back() == '\r')
+    record.pop_back();
   string parts[7] = {"", "", "", "", "", "", ""};
   int pi = 0;
   for (int j = 0; j < (int)record.length(); j++)
   {
-    if (record[j] == '|') { if (pi < 6) pi++; }
-    else parts[pi] += record[j];
+    if (record[j] == '|')
+    {
+      if (pi < 6)
+        pi++;
+    }
+    else
+      parts[pi] += record[j];
   }
   string status = (parts[6] == "1") ? "Blocked" : "Active";
 
-  cout << "\n╔══════════════════════════════════╗\n";
-  cout <<   "║        Customer Details          ║\n";
-  cout <<   "╠══════════════════════════════════╣\n";
-  cout << left;
-  cout << "║  CNIC   : " << setw(22) << parts[0] << "║\n";
-  cout << "║  Name   : " << setw(22) << parts[2] << "║\n";
-  cout << "║  Gender : " << setw(22) << parts[3] << "║\n";
-  cout << "║  Phone  : " << setw(22) << parts[4] << "║\n";
-  cout << "║  City   : " << setw(22) << parts[5] << "║\n";
-  cout << "║  Status : " << setw(22) << status   << "║\n";
-  cout <<   "╚══════════════════════════════════╝\n";
+  cout << "\n╔══════════════════════════════════════╗\n";
+  cout << "║          Customer Details            ║\n";
+  cout << "╠══════════════════════════════════════╣\n";
+  cout << "║  CNIC   : " << left << setw(26) << parts[0] << "║\n";
+  cout << "║  Name   : " << left << setw(26) << parts[2] << "║\n";
+  cout << "║  Gender : " << left << setw(26) << parts[3] << "║\n";
+  cout << "║  Phone  : " << left << setw(26) << parts[4] << "║\n";
+  cout << "║  City   : " << left << setw(26) << parts[5] << "║\n";
+  cout << "║  Status : " << left << setw(26) << status << "║\n";
+  cout << "╚══════════════════════════════════════╝\n";
   return record;
 }
 
