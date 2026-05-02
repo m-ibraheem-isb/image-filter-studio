@@ -18,6 +18,7 @@ public:
                         string phone, string city);
   string findCustomer(string cnic);
   void blockCustomer(string cnic);
+  void unblockCustomer(string cnic);
   void deleteCustomer(string cnic);
   vector<string> loadAllCustomers();
   bool isCnicBlocked(string cnic);

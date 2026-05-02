@@ -1,11 +1,13 @@
 #include "ImageFileManager.h"
+
+#define STB_IMAGE_IMPLEMENTATION
 #include "../stb_image/stb_image.h"
 
 // Default Constructor:
-ImageFileManager::ImageFileManager():filePath(""),width(0),height(0),channels(0){}
+ImageFileManager::ImageFileManager() : filePath(""), width(0), height(0), channels(0) {}
 
 // Parametrized Constructor:
-ImageFileManager::ImageFileManager(string path) : filePath(path){}
+ImageFileManager::ImageFileManager(string path) : filePath(path) {}
 
 // File Extenion:
 string ImageFileManager::getFileExtension(string path)
@@ -26,11 +28,11 @@ Image *ImageFileManager::loadImage(string path)
 
   if (data == nullptr)
   {
-    cout << "Error loading image: " << path << endl;
+    cout << "Error loading image: " << path << " (" << stbi_failure_reason() << ")" << endl;
     return nullptr;
   }
 
-  Image *img = new Image(width, height);
+  Image *img = new Image(height, width);
 
   for (int row = 0; row < height; row++)
   {

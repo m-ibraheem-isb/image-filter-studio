@@ -1,7 +1,7 @@
 #include "BoxBlurFilter.h"
 
 // Default Constructor:
-BoxBlurFilter::BoxBlurFilter() : Filter(10, "Box Blur", "Spatial Filter", true) {}
+BoxBlurFilter::BoxBlurFilter() : Filter(8, "Box Blur", "Spatial Filter", true) {}
 
 // Check Boundary:
 bool BoxBlurFilter::CheckBoundary(int row, int coloumn, int height, int width)

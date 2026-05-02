@@ -61,6 +61,8 @@ void Catalogue::loadFilters()
       filterID = filterID * 10 + (id[i] - '0');
     }
 
+    // Strip carriage return from Windows line endings
+    if (!enabled.empty() && enabled.back() == '\r') enabled.pop_back();
     bool isEnabled = (enabled == "1");
 
     Filter *f = nullptr;

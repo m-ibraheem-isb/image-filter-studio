@@ -16,5 +16,6 @@ public:
   void viewAllCustomers();
   string searchCustomer(string cnic);
   void blockCustomer(string cnic);
+  void unblockCustomer(string cnic);
   void deleteCustomer(string cnic);
 };

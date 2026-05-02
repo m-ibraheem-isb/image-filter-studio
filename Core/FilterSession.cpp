@@ -1,13 +1,15 @@
 #include "FilterSession.h"
 #include "../Manager Files/SessionsFileManager.h"
 #include <ctime>
+#include <iostream>
+using namespace std;
 
 FilterSession::FilterSession(string cnic, Image *img)
 {
-  this->cnic = cnic;
-  this->image = img;
+  this->cnic      = cnic;
+  this->image     = img;
   this->timestamp = generateTimestamp();
-  this->outputFileName = cnic + "_" + timestamp + ".png";
+  this->outputFileName = "Output Images/" + cnic + "_" + timestamp + ".png";
 }
 
 FilterSession::~FilterSession()
@@ -32,16 +34,21 @@ string FilterSession::generateOutputFileName()
 FilterSession &FilterSession::addFilter(Filter *f)
 {
   pipeline.push_back(f);
-  return *this;
+  return *this;   // enables method chaining
 }
 
 void FilterSession::displayPipeline()
 {
-  cout << "[ ";
-  for (int i = 0; i < pipeline.size(); i++)
+  if (pipeline.empty())
+  {
+    cout << "Pipeline: (empty)" << endl;
+    return;
+  }
+  cout << "Pipeline: [ ";
+  for (int i = 0; i < (int)pipeline.size(); i++)
   {
     cout << pipeline[i]->getFilterName();
-    if (i < pipeline.size() - 1)
+    if (i < (int)pipeline.size() - 1)
       cout << " -> ";
   }
   cout << " ]" << endl;
@@ -49,25 +56,40 @@ void FilterSession::displayPipeline()
 
 void FilterSession::applyAll()
 {
-  for (int i = 0; i < pipeline.size(); i++)
+  if (pipeline.empty())
   {
-    if (pipeline[i]->isFilterEnabled())
-    {
-      *image = pipeline[i]->apply(*image);
-    }
+    cout << "Pipeline is empty. Nothing to apply." << endl;
+    return;
   }
+
+  cout << "\n=== Applying Pipeline ===" << endl;
+  for (int i = 0; i < (int)pipeline.size(); i++)
+  {
+    if (!pipeline[i]->isFilterEnabled())
+    {
+      cout << "Skipping disabled filter: " << pipeline[i]->getFilterName() << endl;
+      continue;
+    }
+    cout << "\nApplying filter " << (i + 1) << "/" << pipeline.size()
+         << ": " << pipeline[i]->getFilterName() << " ..." << endl;
+
+    *image = pipeline[i]->apply(*image);   // operator= now deep-copies → no crash
+
+    image->displayASCII();
+  }
+  cout << "\nAll " << pipeline.size() << " filter(s) applied." << endl;
 }
 
-void FilterSession::saveResult(const string &path)
+void FilterSession::saveResult(const string & /*path*/)
 {
   image->save(outputFileName);
-  SessionsFileManager Saver("sessions.txt");
+  SessionsFileManager saver("Data/Sesssions.txt");
   string filtersApplied = "";
-  for (int i = 0; i < pipeline.size(); i++)
+  for (int i = 0; i < (int)pipeline.size(); i++)
   {
     filtersApplied += pipeline[i]->getFilterName();
-    if (i < pipeline.size() - 1)
+    if (i < (int)pipeline.size() - 1)
       filtersApplied += ">";
   }
-  Saver.saveSession(cnic, timestamp, filtersApplied, outputFileName);
+  saver.saveSession(cnic, timestamp, filtersApplied, outputFileName);
 }

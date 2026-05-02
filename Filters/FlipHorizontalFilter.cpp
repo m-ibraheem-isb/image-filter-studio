@@ -1,7 +1,7 @@
 #include "FlipHorizontalFilter.h"
 
 // Default Constructor:
-FlipHorizontalFilter::FlipHorizontalFilter() : Filter(8, "Flip Horizontal", "Geometric", true) {}
+FlipHorizontalFilter::FlipHorizontalFilter() : Filter(9, "Flip Horizontal", "Geometric", true) {}
 
 // Overloaded apply() Function:
 Image FlipHorizontalFilter::apply(const Image &img)

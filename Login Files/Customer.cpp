@@ -4,7 +4,10 @@
 #include "../Manager Files/ImageFileManager.h"
 #include "../Core/Catalouge.h"
 #include "../Core/FilterSession.h"
+#include "../Filters/BrightnessFilter.h"
 #include <iostream>
+#include <limits>
+#include <string>
 using namespace std;
 
 Customer::Customer(string cnic, string password, string fullName,
@@ -38,30 +41,23 @@ bool Customer::login()
 
     if (cfm.validateLogin(inputCnic, inputPass))
     {
-      // Store CNIC and name into this object
       setCnic(inputCnic);
-
-      // Get full name from record
       string record = cfm.findCustomer(inputCnic);
       string parts[7];
-      int partIndex = 0;
-      string current = "";
-      for (int i = 0; i < record.length(); i++)
+      int pi = 0;
+      string cur = "";
+      for (char c : record)
       {
-        if (record[i] == '|')
+        if (c == '|')
         {
-          parts[partIndex] = current;
-          partIndex++;
-          current = "";
+          parts[pi++] = cur;
+          cur = "";
         }
-        else if (record[i] != '\r')
-        {
-          current += record[i];
-        }
+        else if (c != '\r')
+          cur += c;
       }
-      parts[partIndex] = current;
+      parts[pi] = cur;
       setFullName(parts[2]);
-
       cout << "Login successful. Welcome, " << getFullName() << "!" << endl;
       return true;
     }
@@ -69,7 +65,6 @@ bool Customer::login()
     attempts++;
     cout << "Invalid credentials. Attempts left: " << (3 - attempts) << endl;
   }
-
   cout << "Too many failed attempts. Returning to main menu." << endl;
   return false;
 }
@@ -92,47 +87,54 @@ void Customer::registerAccount()
     cout << "Invalid CNIC. Must be exactly 13 digits." << endl;
     return;
   }
+  bool allDigits = true;
+  for (char c : cnic)
+    if (c < '0' || c > '9')
+    {
+      allDigits = false;
+      break;
+    }
+  if (!allDigits)
+  {
+    cout << "CNIC must contain digits only." << endl;
+    return;
+  }
 
   if (cfm.isCnicBlocked(cnic))
   {
     cout << "This CNIC is blocked. Cannot register." << endl;
     return;
   }
-
   if (!cfm.findCustomer(cnic).empty())
   {
     cout << "CNIC already registered." << endl;
     return;
   }
 
-  cout << "Enter Password (9 chars, 1 uppercase, 1 digit): ";
+  cout << "Enter Password (exactly 9 chars, 1 uppercase, 1 digit): ";
   cin >> password;
 
-  if (password.length() < 9)
+  if (password.length() != 9)
   {
     cout << "Password must be exactly 9 characters." << endl;
     return;
   }
-
-  bool hasUpper = false;
-  bool hasDigit = false;
-  for (int i = 0; i < password.length(); i++)
+  bool hasUpper = false, hasDigit = false;
+  for (char c : password)
   {
-    if (password[i] >= 'A' && password[i] <= 'Z')
+    if (c >= 'A' && c <= 'Z')
       hasUpper = true;
-    if (password[i] >= '0' && password[i] <= '9')
+    if (c >= '0' && c <= '9')
       hasDigit = true;
   }
-
   if (!hasUpper || !hasDigit)
   {
-    cout << "Password must have at least 1 uppercase and 1 digit." << endl;
+    cout << "Password must have at least 1 uppercase letter and 1 digit." << endl;
     return;
   }
 
   cout << "Confirm Password: ";
   cin >> confirmPass;
-
   if (password != confirmPass)
   {
     cout << "Passwords do not match." << endl;
@@ -156,97 +158,232 @@ void Customer::registerAccount()
   cout << "Registration successful!" << endl;
 }
 
-void Customer::loadImage(string path)
-{
-  ImageFileManager ifm;
-  Image *img = ifm.loadImage(path);
-  if (img == nullptr)
-  {
-    cout << "Failed to load image. File not found." << endl;
-    return;
-  }
-  cout << "Image loaded: " << img->getWidth() << " x " << img->getHeight() << endl;
-  img->displayASCII();
-  delete img;
-}
-
 void Customer::buildPipeline()
 {
   Catalogue cat("Data/Catalouge.txt");
   cat.loadFilters();
   vector<Filter *> enabled = cat.getEnabledFilters();
 
-  cout << "\n=== Available Filters ===" << endl;
-  for (int i = 0; i < enabled.size(); i++)
+  if (enabled.empty())
   {
-    cout << enabled[i]->getFilterID() << ". "
-         << enabled[i]->getFilterName() << " ["
-         << enabled[i]->getCategory() << "]" << endl;
+    cout << "\nNo filters currently available." << endl;
+    return;
   }
+
+  int rows = enabled.size();
+  string table[100][4];
+  int w[4] = {2, 4, 8, 6};
+
+  for (int i = 0; i < rows && i < 100; i++)
+  {
+    table[i][0] = to_string(enabled[i]->getFilterID());
+    table[i][1] = enabled[i]->getFilterName();
+    table[i][2] = enabled[i]->getCategory();
+    table[i][3] = enabled[i]->isFilterEnabled() ? "Enabled" : "Disabled";
+
+    for (int j = 0; j < 4; j++)
+    {
+      if ((int)table[i][j].length() > w[j])
+        w[j] = table[i][j].length();
+    }
+  }
+
+  cout << "\n╔";
+  for (int i = 0; i < w[0] + 2; i++)
+    cout << "═";
+  cout << "╤";
+  for (int i = 0; i < w[1] + 2; i++)
+    cout << "═";
+  cout << "╤";
+  for (int i = 0; i < w[2] + 2; i++)
+    cout << "═";
+  cout << "╤";
+  for (int i = 0; i < w[3] + 2; i++)
+    cout << "═";
+  cout << "╗\n";
+
+  cout << "║ " << "ID";
+  for (int i = 0; i < w[0] - 2; i++)
+    cout << " ";
+  cout << " │ ";
+  cout << "Name";
+  for (int i = 0; i < w[1] - 4; i++)
+    cout << " ";
+  cout << " │ ";
+  cout << "Category";
+  for (int i = 0; i < w[2] - 8; i++)
+    cout << " ";
+  cout << " │ ";
+  cout << "Status";
+  for (int i = 0; i < w[3] - 6; i++)
+    cout << " ";
+  cout << " ║\n";
+
+  cout << "╠";
+  for (int i = 0; i < w[0] + 2; i++)
+    cout << "═";
+  cout << "╪";
+  for (int i = 0; i < w[1] + 2; i++)
+    cout << "═";
+  cout << "╪";
+  for (int i = 0; i < w[2] + 2; i++)
+    cout << "═";
+  cout << "╪";
+  for (int i = 0; i < w[3] + 2; i++)
+    cout << "═";
+  cout << "╣\n";
+
+  for (int r = 0; r < rows && r < 100; r++)
+  {
+    cout << "║ " << table[r][0];
+    for (int i = 0; i < w[0] - (int)table[r][0].length(); i++)
+      cout << " ";
+    cout << " │ ";
+    cout << table[r][1];
+    for (int i = 0; i < w[1] - (int)table[r][1].length(); i++)
+      cout << " ";
+    cout << " │ ";
+    cout << table[r][2];
+    for (int i = 0; i < w[2] - (int)table[r][2].length(); i++)
+      cout << " ";
+    cout << " │ ";
+    cout << table[r][3];
+    for (int i = 0; i < w[3] - (int)table[r][3].length(); i++)
+      cout << " ";
+    cout << " ║\n";
+  }
+
+  cout << "╚";
+  for (int i = 0; i < w[0] + 2; i++)
+    cout << "═";
+  cout << "╧";
+  for (int i = 0; i < w[1] + 2; i++)
+    cout << "═";
+  cout << "╧";
+  for (int i = 0; i < w[2] + 2; i++)
+    cout << "═";
+  cout << "╧";
+  for (int i = 0; i < w[3] + 2; i++)
+    cout << "═";
+  cout << "╝\n";
 }
 
 void Customer::applyFilters()
 {
-  string imagePath;
-  cout << "Enter image path: ";
-  cin >> imagePath;
+  cout << "\n=== Load Image ===" << endl;
+  cout << "1. Load from JPG/PNG file" << endl;
+  cout << "2. Generate test pattern (for testing without a real image)" << endl;
+  cout << "Choice: ";
+  int loadChoice;
+  cin >> loadChoice;
 
+  Image *imgPtr = nullptr;
   ImageFileManager ifm;
-  Image *imgPtr = ifm.loadImage(imagePath);
 
-  if (imgPtr == nullptr)
+  if (loadChoice == 1)
   {
-    cout << "Failed to load image. Check path and try again." << endl;
-    return;
+    string imagePath;
+    cout << "Enter path to image file: ";
+    cin >> imagePath;
+    imgPtr = ifm.loadImage(imagePath);
+    if (imgPtr == nullptr)
+    {
+      cout << "Failed to load image. Check path and try again." << endl;
+      return;
+    }
+    cout << "Image loaded: " << imgPtr->getWidth() << " x "
+         << imgPtr->getHeight() << " pixels ("
+         << (imgPtr->getWidth() * imgPtr->getHeight()) << " pixels total)" << endl;
+  }
+  else
+  {
+    int tw = 80, th = 40;
+    imgPtr = new Image(th, tw);
+    for (int r = 0; r < th; r++)
+      for (int c = 0; c < tw; c++)
+      {
+        imgPtr->at(r, c).setR((r * 255) / th);
+        imgPtr->at(r, c).setG((c * 255) / tw);
+        imgPtr->at(r, c).setB(128);
+      }
+    cout << "Test pattern generated: " << tw << " x " << th << endl;
   }
 
-  cout << "Image loaded: " << imgPtr->getWidth() << " x " << imgPtr->getHeight() << endl;
-
-  FilterSession session(getCnic(), imgPtr);
+  imgPtr->displayASCII();
+  cout << "Image ready. Now build your filter pipeline." << endl;
 
   Catalogue cat("Data/Catalouge.txt");
   cat.loadFilters();
-  vector<Filter *> enabled = cat.getEnabledFilters();
+  vector<Filter *> allFilters = cat.getAllFilters();
 
-  cout << "\n=== Available Filters ===" << endl;
-  for (int i = 0; i < enabled.size(); i++)
+  FilterSession session(getCnic(), imgPtr);
+
+  cout << "\n=== Build Filter Pipeline ===" << endl;
+  session.displayPipeline();
+
+  cout << "\nAvailable Filters:" << endl;
+  for (int i = 0; i < (int)allFilters.size(); i++)
   {
-    cout << enabled[i]->getFilterID() << ". "
-         << enabled[i]->getFilterName() << endl;
+    string status = allFilters[i]->isFilterEnabled() ? "Enabled" : "Disabled";
+    cout << "  " << allFilters[i]->getFilterID() << "  "
+         << allFilters[i]->getFilterName()
+         << " [" << allFilters[i]->getCategory() << "]  " << status << endl;
   }
 
   int id;
-  cout << "Enter filter ID to add (0 to finish): ";
+  cout << "\nEnter filter ID to add (0 to finish): ";
   cin >> id;
 
   while (id != 0)
   {
     Filter *f = cat.findFilter(id);
-    if (f != nullptr)
+    if (f == nullptr)
     {
-      session.addFilter(f);
-      cout << "Added: " << f->getFilterName() << endl;
-      session.displayPipeline();
+      cout << "Filter not found." << endl;
+    }
+    else if (!f->isFilterEnabled())
+    {
+      cout << "Filter '" << f->getFilterName() << "' is disabled by Admin." << endl;
     }
     else
-      cout << "Filter not found." << endl;
-
+    {
+      if (f->getFilterID() == 3)
+      {
+        int amount;
+        cout << "Enter brightness amount (-100 to +100): ";
+        cin >> amount;
+        if (amount < -100)
+          amount = -100;
+        if (amount > 100)
+          amount = 100;
+        f = new BrightnessFilter(amount);
+        f->setEnabled(true);
+        session.addFilter(f);
+        cout << "Added: Brightness Adjust (" << (amount >= 0 ? "+" : "") << amount << ")" << endl;
+      }
+      else
+      {
+        session.addFilter(f);
+        cout << "Added: " << f->getFilterName() << endl;
+      }
+      session.displayPipeline();
+    }
     cout << "Enter filter ID to add (0 to finish): ";
     cin >> id;
   }
 
-  cout << "\n=== Applying Pipeline ===" << endl;
+  cout << "\nPipeline finalised." << endl;
   session.applyAll();
 
   char save;
-  cout << "Save result? (y/n): ";
+  cout << "\nSave result? (y/n): ";
   cin >> save;
-
   if (save == 'y' || save == 'Y')
   {
+    string outFile = session.generateOutputFileName();
     session.saveResult("");
-    cout << "Image saved successfully." << endl;
-    cout << "Session recorded." << endl;
+    cout << "\nOpen the file in any image viewer to see your result." << endl;
+    cout << "Session recorded in Data/Sesssions.txt." << endl;
   }
 
   delete imgPtr;
@@ -254,17 +391,137 @@ void Customer::applyFilters()
 
 void Customer::viewSessionHistory()
 {
-  SessionsFileManager sfm("Data/Sessions.txt");
+  SessionsFileManager sfm("Data/Sesssions.txt");
   vector<string> sessions = sfm.loadCustomerSessions(getCnic());
 
-  cout << "\n=== Your Session History ===" << endl;
   if (sessions.empty())
   {
-    cout << "No sessions found." << endl;
+    cout << "\nNo sessions found." << endl;
     return;
   }
-  for (int i = 0; i < sessions.size(); i++)
-    cout << sessions[i] << endl;
+
+  int rows = sessions.size();
+  string table[100][4];
+  int w[4] = {4, 9, 15, 11};
+
+  for (int i = 0; i < rows && i < 100; i++)
+  {
+    string line = sessions[i];
+    string parts[4] = {"", "", "", ""};
+    int partIdx = 0;
+
+    for (char c : line)
+    {
+      if (c == '|')
+      {
+        if (partIdx < 3)
+          partIdx++;
+      }
+      else if (c != '\r')
+      {
+        parts[partIdx] += c;
+      }
+    }
+
+    for (int j = 0; j < 4; j++)
+    {
+      table[i][j] = parts[j];
+      int len = table[i][j].length();
+
+      if (len > w[j])
+      {
+        if (j == 2 && len > 35)
+          w[j] = 35;
+        else if (j == 3 && len > 32)
+          w[j] = 32;
+        else
+          w[j] = len;
+      }
+    }
+  }
+
+  cout << "\n╔";
+  for (int i = 0; i < w[0] + 2; i++)
+    cout << "═";
+  cout << "╤";
+  for (int i = 0; i < w[1] + 2; i++)
+    cout << "═";
+  cout << "╤";
+  for (int i = 0; i < w[2] + 2; i++)
+    cout << "═";
+  cout << "╤";
+  for (int i = 0; i < w[3] + 2; i++)
+    cout << "═";
+  cout << "╗\n";
+
+  cout << "║ " << "CNIC";
+  for (int i = 0; i < w[0] - 4; i++)
+    cout << " ";
+  cout << " │ ";
+  cout << "Timestamp";
+  for (int i = 0; i < w[1] - 9; i++)
+    cout << " ";
+  cout << " │ ";
+  cout << "Filters Applied";
+  for (int i = 0; i < w[2] - 15; i++)
+    cout << " ";
+  cout << " │ ";
+  cout << "Output File";
+  for (int i = 0; i < w[3] - 11; i++)
+    cout << " ";
+  cout << " ║\n";
+
+  cout << "╠";
+  for (int i = 0; i < w[0] + 2; i++)
+    cout << "═";
+  cout << "╪";
+  for (int i = 0; i < w[1] + 2; i++)
+    cout << "═";
+  cout << "╪";
+  for (int i = 0; i < w[2] + 2; i++)
+    cout << "═";
+  cout << "╪";
+  for (int i = 0; i < w[3] + 2; i++)
+    cout << "═";
+  cout << "╣\n";
+
+  for (int r = 0; r < rows && r < 100; r++)
+  {
+    cout << "║ ";
+    for (int j = 0; j < 4; j++)
+    {
+      string cell = table[r][j];
+
+      if ((int)cell.length() > w[j])
+      {
+        cout << cell.substr(0, w[j]);
+      }
+      else
+      {
+        cout << cell;
+        for (int k = 0; k < w[j] - (int)cell.length(); k++)
+          cout << " ";
+      }
+
+      if (j < 3)
+        cout << " │ ";
+    }
+    cout << " ║\n";
+  }
+
+  cout << "╚";
+  for (int i = 0; i < w[0] + 2; i++)
+    cout << "═";
+  cout << "╧";
+  for (int i = 0; i < w[1] + 2; i++)
+    cout << "═";
+  cout << "╧";
+  for (int i = 0; i < w[2] + 2; i++)
+    cout << "═";
+  cout << "╧";
+  for (int i = 0; i < w[3] + 2; i++)
+    cout << "═";
+  cout << "╝\n";
 }
 
 string Customer::getGender() const { return gender; }

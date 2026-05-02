@@ -93,6 +93,58 @@ void CustomersFileManager::blockCustomer(string cnic)
   blockedFile.close();
 }
 
+void CustomersFileManager::unblockCustomer(string cnic)
+{
+  vector<string> records = loadAllCustomers();
+  ofstream file(customersFilePath);
+
+  for (int i = 0; i < (int)records.size(); i++)
+  {
+    string fileCnic = "";
+    for (int j = 0; j < (int)records[i].length(); j++)
+    {
+      if (records[i][j] == '|')
+        break;
+      fileCnic += records[i][j];
+    }
+
+    if (fileCnic == cnic)
+    {
+      string newLine = "";
+      int barCount = 0;
+      for (int j = 0; j < (int)records[i].length(); j++)
+      {
+        if (records[i][j] == '|')
+          barCount++;
+        if (barCount == 6)
+          break;
+        newLine += records[i][j];
+      }
+      file << newLine << "|0" << endl;
+    }
+    else
+    {
+      file << records[i] << endl;
+    }
+  }
+  file.close();
+
+  vector<string> blocked;
+  ifstream blockedIn(blockedCnicsFilePath);
+  string line;
+  while (getline(blockedIn, line))
+  {
+    if (!line.empty() && line.back() == '\r') line.pop_back();
+    if (!line.empty() && line != cnic)
+      blocked.push_back(line);
+  }
+  blockedIn.close();
+  ofstream blockedOut(blockedCnicsFilePath);
+  for (int i = 0; i < (int)blocked.size(); i++)
+    blockedOut << blocked[i] << endl;
+  blockedOut.close();
+}
+
 void CustomersFileManager::deleteCustomer(string cnic)
 {
   vector<string> records = loadAllCustomers();

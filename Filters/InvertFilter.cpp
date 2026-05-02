@@ -1,7 +1,7 @@
 #include "InvertFilter.h"
 
 // Default Constructor:
-InvertFilter::InvertFilter() : Filter(2, "Inver Filter", "Pixel Transform", true) {}
+InvertFilter::InvertFilter() : Filter(2, "Invert", "Pixel Transform", true) {}
 
 // Overloaded apply() Function:
 Image InvertFilter::apply(const Image &img)

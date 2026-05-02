@@ -1,0 +1,4 @@
+8220374854637|20260502_144022|Grayscale|Output Images/8220374854637_20260502_144022.png
+8220374854637|20260502_144206|Grayscale>Invert>Brightness Adjust>Red Channel Only>Green Channel Only>Blue Channel Only>Box Blur>Flip Horizontal|Output Images/8220374854637_20260502_144206.png
+8220374854637|20260502_161818|Grayscale>Grayscale>Grayscale>Invert|Output Images/8220374854637_20260502_161818.png
+8220374854637|20260502_165558|Green Channel Only|Output Images/8220374854637_20260502_165558.png
