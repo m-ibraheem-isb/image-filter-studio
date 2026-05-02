@@ -1,7 +1,5 @@
 #include "ImageFileManager.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image/stb_image.h"
+#include "../stb_image/stb_image.h"
 
 // Default Constructor:
 ImageFileManager::ImageFileManager():filePath(""),width(0),height(0),channels(0){}
@@ -22,26 +20,26 @@ string ImageFileManager::getFileExtension(string path)
 }
 
 // Loading Image:
-Image ImageFileManager::loadImage(string path)
+Image *ImageFileManager::loadImage(string path)
 {
   unsigned char *data = stbi_load(path.c_str(), &width, &height, &channels, 3);
 
   if (data == nullptr)
   {
-    cout << "Error loading image" << endl;
-    return Image(1, 1);
+    cout << "Error loading image: " << path << endl;
+    return nullptr;
   }
 
-  Image img(width, height);
+  Image *img = new Image(width, height);
 
   for (int row = 0; row < height; row++)
   {
     for (int col = 0; col < width; col++)
     {
       int index = (row * width + col) * 3;
-      img.at(row, col).setR(data[index]);
-      img.at(row, col).setG(data[index + 1]);
-      img.at(row, col).setB(data[index + 2]);
+      img->at(row, col).setR(data[index]);
+      img->at(row, col).setG(data[index + 1]);
+      img->at(row, col).setB(data[index + 2]);
     }
   }
 

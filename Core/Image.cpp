@@ -1,10 +1,5 @@
-// #define STB_IMAGE_IMPLEMENTATION
-// #include "stb_image/stb_image.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../stb_image/stb_image_write.h"
-
 #include "Image.h"
+#include "../stb_image/stb_image_write.h"
 
 // Default Constructor:
 Image::Image() : pixels(nullptr), height(0), width(0) {}

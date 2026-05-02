@@ -17,6 +17,6 @@ public:
   ImageFileManager();
   ImageFileManager(string path);
 
-  Image loadImage(string path);
+  Image* loadImage(string path);
   void saveImage(Image &img, string path);
 };

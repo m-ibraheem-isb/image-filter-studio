@@ -10,4 +10,5 @@ public:
   BrightnessFilter(int value);
   Image apply(const Image &img) override;
   int getAdjustmentValue() const;
+  Filter *clone() const override { return new BrightnessFilter(*this); }
 };

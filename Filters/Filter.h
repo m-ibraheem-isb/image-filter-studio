@@ -17,6 +17,7 @@ public:
   virtual ~Filter();
 
   virtual Image apply(const Image &img) = 0;
+  virtual Filter *clone() const = 0;
 
   int getFilterID() const;
   string getFilterName() const;

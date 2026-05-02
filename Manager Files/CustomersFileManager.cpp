@@ -3,14 +3,14 @@
 
 CustomersFileManager::CustomersFileManager()
 {
-  customersFilePath = "customers.txt";
-  blockedCnicsFilePath = "blocked_cnics.txt";
+  customersFilePath = "Data/Customers.txt";
+  blockedCnicsFilePath = "Data/Blocked_cnics.txt";
 }
 
 CustomersFileManager::CustomersFileManager(string path)
 {
   customersFilePath = path;
-  blockedCnicsFilePath = "blocked_cnics.txt";
+  blockedCnicsFilePath = "Data/Blocked_cnics.txt";
 }
 
 void CustomersFileManager::registerCustomer(string cnic, string password,
@@ -31,6 +31,8 @@ string CustomersFileManager::findCustomer(string cnic)
   {
     if (line.empty())
       continue;
+    if (!line.empty() && line.back() == '\r')
+      line.pop_back();
 
     string fileCnic = "";
     for (int i = 0; i < line.length(); i++)
@@ -147,7 +149,6 @@ bool CustomersFileManager::isCnicBlocked(string cnic)
 bool CustomersFileManager::validateLogin(string cnic, string password)
 {
   string record = findCustomer(cnic);
-
   if (record.empty())
     return false;
 
@@ -163,7 +164,7 @@ bool CustomersFileManager::validateLogin(string cnic, string password)
       partIndex++;
       current = "";
     }
-    else
+    else if (record[i] != '\r')
     {
       current += record[i];
     }
@@ -172,7 +173,6 @@ bool CustomersFileManager::validateLogin(string cnic, string password)
 
   if (parts[1] != password)
     return false;
-
   if (parts[6] == "1")
     return false;
 

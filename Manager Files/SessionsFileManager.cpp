@@ -3,7 +3,7 @@
 
 SessionsFileManager::SessionsFileManager()
 {
-  filePath = "sessions.txt";
+  filePath = "Data/Sessions.txt";
 }
 
 SessionsFileManager::SessionsFileManager(string path)

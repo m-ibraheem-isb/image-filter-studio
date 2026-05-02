@@ -14,7 +14,7 @@
 #include <sstream>
 
 // Default Constructor:
-Catalogue::Catalogue() : filePath( "catalog.txt"){}
+Catalogue::Catalogue() : filePath( "Data/Catalouge.txt"){}
 
 // Parametrized Constructor:
 Catalogue::Catalogue(string path):  filePath(path){}

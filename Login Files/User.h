@@ -16,6 +16,8 @@ public:
   virtual bool login() = 0;
   virtual void logout() = 0;
 
+  void setCnic(string c);
+  void setFullName(string n);
   string getCnic() const;
   string getPassword() const;
   string getFullName() const;

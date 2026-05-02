@@ -4,7 +4,7 @@
 
 CatalogueFileManager::CatalogueFileManager()
 {
-  filePath = "catalog.txt";
+  filePath = "Data/Catalouge.txt";
 }
 
 CatalogueFileManager::CatalogueFileManager(string path)
