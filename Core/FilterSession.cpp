@@ -22,7 +22,7 @@ string FilterSession::generateTimestamp()
   time_t now = time(0);
   tm *ltm = localtime(&now);
   char buffer[20];
-  strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H:%M:%S", ltm);
+  strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H-%M-%S", ltm);
   return string(buffer);
 }
 

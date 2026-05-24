@@ -75,7 +75,6 @@ const Pixel &Image::at(int row, int col) const { return pixels[row][col]; }
 int Image::getWidth()  const { return width;  }
 int Image::getHeight() const { return height; }
 
-// *** FIX #3: Scaled ASCII preview – max 80 cols × 30 rows ***
 void Image::displayASCII() const
 {
   const int MAX_COLS = 80;

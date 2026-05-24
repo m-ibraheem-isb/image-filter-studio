@@ -55,6 +55,7 @@ void Catalogue::loadFilters()
         enabled += line[i];
     }
 
+    // Converting String ID to Numeric Id:
     int filterID = 0;
     for (int i = 0; i < id.length(); i++)
     {
